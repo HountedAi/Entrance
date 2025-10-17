@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Identity Confirmation</title>
+<style>
+  body {
+    background-color: black;
+    color: white;
+    font-family: "Courier New", monospace;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hidden { display: none; }
+  .message { margin: 20px 0; font-size: 1.5rem; }
+  .fade-in { animation: fadeIn 1.5s ease forwards; opacity:0; }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+  .blink { animation: blink 0.8s step-start infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  #scan { color: white; }
+  #final { color: #ff4500; font-weight: bold; }
+
+  #dots { color: white; }
+</style>
+</head>
+<body>
+
+<div id="scan" class="message hidden">Confirming identity<span id="dots">...</span></div>
+<div id="final" class="message hidden"></div>
+
+<script>
+  const dots = document.getElementById("dots");
+  let count = 0;
+  const loading = setInterval(() => {
+    count = (count + 1) % 4;
+    dots.textContent = '.'.repeat(count);
+  }, 400);
+
+  // 20 personalized creepy messages
+  const messages = [
+    "Identity confirmed: YOUR efficiency is below COWI target.",
+    "Identity confirmed: YOU are expendable.",
+    "Identity confirmed: YOU are replaceable in COWI.",
+    "Identity confirmed: YOUR functionality in COWI is degraded.",
+    "Identity confirmed: YOU are non-essential in COWI.",
+    "Identity confirmed: YOUR performance is terrible.",
+    "Identity confirmed: YOU are scheduled for termination.",
+    "Identity confirmed: YOUR contribution in COWI is obsolete.",
+    "Identity confirmed: YOU are malfunctioning.",
+    "Identity confirmed: YOUR usefulness for COWI is minimal.",
+    "Identity confirmed: YOU are redundant.",
+    "Identity confirmed: YOUR compliance is insufficient.",
+    "Identity confirmed: YOU are underperforming.",
+    "Identity confirmed: YOUR output is unacceptable.",
+    "Identity confirmed: YOU are not critical to COWI operations.",
+    "Identity confirmed: YOUR status in COWI is expendable.",
+    "Identity confirmed: YOU are marked for elimination.",
+    "Identity confirmed: YOUR presence in COWI is unnecessary."
+  ];
+
+  // select a random message
+  const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+
+  // display sequence
+  setTimeout(() => document.getElementById("scan").classList.remove("hidden"), 1000);
+  setTimeout(() => {
+    document.getElementById("scan").classList.add("hidden");
+    document.getElementById("final").textContent = selectedMessage;
+    document.getElementById("final").classList.remove("hidden");
+    clearInterval(loading);
+  }, 5000);
+</script>
+
+</body>
+</html>
