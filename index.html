@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Identity Confirmation</title>
+<title>COWI Identity Scan</title>
 <style>
   body {
-    background-color: black;
-    color: white;
+    background-color: #231f20; /* near-black COWI text color */
+    color: #ebe5da; /* Warm Grey 1 for default text */
     font-family: "Courier New", monospace;
     display: flex;
     flex-direction: column;
@@ -19,23 +19,34 @@
   }
 
   .hidden { display: none; }
-  .message { margin: 20px 0; font-size: 1.5rem; }
+  .message { margin: 20px 0; font-size: 1.4rem; }
+
+  /* Smooth fade-ins */
   .fade-in { animation: fadeIn 1.5s ease forwards; opacity:0; }
   @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
+  /* Blinking text */
   .blink { animation: blink 0.8s step-start infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
-  #scan { color: white; }
-  #final { color: #ff4500; font-weight: bold; }
+  /* Colors */
+  .scan { color: #d0c7bd; } /* Warm Grey 3 for scanning text */
+  .identity-label { color: #00ff66; } /* green for 'Identity confirmed' */
+  .identity-text { color: #F04E23; font-weight: bold; } /* orange for verdict text */
+  .action { color: #b0a49a; font-style: italic; } /* Warm Grey 5 for final action text */
 
-  #dots { color: white; }
+  #dots { color: #d0c7bd; }
 </style>
 </head>
 <body>
 
-<div id="scan" class="message hidden">Confirming identity<span id="dots">...</span></div>
-<div id="final" class="message hidden"></div>
+<div id="scan" class="message hidden scan">Scanning facial structure<span id="dots">...</span></div>
+
+<!-- Two separate lines for the verdict -->
+<div id="verdict-label" class="message hidden identity-label">Identity confirmed. Status:</div>
+<div id="verdict-text" class="message hidden identity-text"></div>
+
+<div id="actions" class="message hidden action fade-in"></div>
 
 <script>
   const dots = document.getElementById("dots");
@@ -45,39 +56,55 @@
     dots.textContent = '.'.repeat(count);
   }, 400);
 
-  // 20 personalized creepy messages
-  const messages = [
-    "Identity confirmed: YOUR efficiency is below COWI target.",
-    "Identity confirmed: YOU are expendable.",
-    "Identity confirmed: YOU are replaceable in COWI.",
-    "Identity confirmed: YOUR functionality in COWI is degraded.",
-    "Identity confirmed: YOU are non-essential in COWI.",
-    "Identity confirmed: YOUR performance is terrible.",
-    "Identity confirmed: YOU are scheduled for termination.",
-    "Identity confirmed: YOUR contribution in COWI is obsolete.",
-    "Identity confirmed: YOU are malfunctioning.",
-    "Identity confirmed: YOUR usefulness for COWI is minimal.",
-    "Identity confirmed: YOU are redundant.",
-    "Identity confirmed: YOUR compliance is insufficient.",
-    "Identity confirmed: YOU are underperforming.",
-    "Identity confirmed: YOUR output is unacceptable.",
-    "Identity confirmed: YOU are not critical to COWI operations.",
-    "Identity confirmed: YOUR status in COWI is expendable.",
-    "Identity confirmed: YOU are marked for elimination.",
-    "Identity confirmed: YOUR presence in COWI is unnecessary."
+  // Possible identity verdicts
+  const verdicts = [
+    "YOUR efficiency metrics are unacceptable.",
+    "YOU have failed the compliance threshold.",
+    "YOUR efficiency is below COWI target.",
+    "YOU are expendable.",
+    "YOU are replaceable in COWI.",
+    "YOU are non-essential in COWI.",
+    "YOUR performance is terrible.",
+    "YOUR contribution in COWI is obsolete.",
+    "YOU are malfunctioning.",
+    "YOUR usefulness for COWI is minimal.",
+    "YOU are redundant.",
+    "YOUR compliance is insufficient.",
+    "YOU are underperforming.",
+    "YOUR output is unacceptable.",
+    "YOU are not critical to COWI operations.",
+    "YOUR status in COWI is expendable.",
+    "YOUR presence in COWI is unnecessary."
   ];
 
-  // select a random message
-  const selectedMessage = messages[Math.floor(Math.random() * messages.length)];
+  const actions = [
+    "COWI AI notified HR . Termination procedure initiated.",
+    "COWI AI revoked all working from home privileges indefinitely.",
+    "COWI AI reduced your Career Level 0 — Observation Mode.",
+    "COWI AI activated automatic retraining protocol  — duration: unknown.",
+    "COWI AI will continue monitoring your productivity levels.",
+    "COWI AI sent an email to your manager. And theirs.",
+    "COWI AI initiated replacement clone to be printed.",
+    "Good news: COWI AI added you to the 'Career Transition Simulation' program.",
+	"COWI AI successfully  scheduled you for termination."
+  ];
 
-  // display sequence
+  const selectedVerdict = verdicts[Math.floor(Math.random() * verdicts.length)];
+  const selectedAction = actions[Math.floor(Math.random() * actions.length)];
+
+  // Display sequence
   setTimeout(() => document.getElementById("scan").classList.remove("hidden"), 1000);
   setTimeout(() => {
     document.getElementById("scan").classList.add("hidden");
-    document.getElementById("final").textContent = selectedMessage;
-    document.getElementById("final").classList.remove("hidden");
+    document.getElementById("verdict-label").classList.remove("hidden");
+    document.getElementById("verdict-text").textContent = selectedVerdict;
+    document.getElementById("verdict-text").classList.remove("hidden");
     clearInterval(loading);
   }, 5000);
+  setTimeout(() => {
+    document.getElementById("actions").textContent = selectedAction;
+    document.getElementById("actions").classList.remove("hidden");
+  }, 6500);
 </script>
 
 </body>
