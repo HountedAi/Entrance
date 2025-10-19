@@ -6,8 +6,8 @@
 <title>COWI Identity Scan</title>
 <style>
   body {
-    background-color: #231f20; /* near-black COWI text color */
-    color: #ebe5da; /* Warm Grey 1 for default text */
+    background-color: #231f20;
+    color: #ebe5da;
     font-family: "Courier New", monospace;
     display: flex;
     flex-direction: column;
@@ -19,34 +19,47 @@
   }
 
   .hidden { display: none; }
-  .message { margin: 20px 0; font-size: 1.4rem; }
+  .message { margin: 20px 0; font-size: 1.3rem; }
 
-  /* Smooth fade-ins */
-  .fade-in { animation: fadeIn 1.5s ease forwards; opacity:0; }
+  /* Animations */
+  .fade-in { animation: fadeIn 1s ease forwards; opacity:0; }
   @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 
-  /* Blinking text */
   .blink { animation: blink 0.8s step-start infinite; }
   @keyframes blink { 50% { opacity: 0; } }
 
   /* Colors */
-  .scan { color: #d0c7bd; } /* Warm Grey 3 for scanning text */
-  .identity-label { color: #00ff66; } /* green for 'Identity confirmed' */
-  .identity-text { color: #F04E23; font-weight: bold; } /* orange for verdict text */
-  .action { color: #b0a49a; font-style: italic; } /* Warm Grey 5 for final action text */
+  .scan { color: #d0c7bd; }
+  .identity-label { color: #00ff66; font-weight: bold; }
+  .identity-text { color: #F04E23; font-weight: bold; }
+  .action { color: #b0a49a; font-style: italic; }
+  .log { color: #d0c7bd; font-size: 1.1rem; }
 
   #dots { color: #d0c7bd; }
 </style>
 </head>
 <body>
 
+<!-- Scanning -->
 <div id="scan" class="message hidden scan">Scanning facial structure<span id="dots">...</span></div>
 
-<!-- Two separate lines for the verdict -->
-<div id="verdict-label" class="message hidden identity-label">Identity confirmed. Status:</div>
+<!-- Identity confirmation -->
+<div id="identity-label" class="message hidden identity-label">Identity confirmed.</div>
+<div id="activity-label" class="message hidden identity-label">Activity tracked:</div>
+
+<!-- Behavior logs -->
+<div id="logs" class="hidden">
+  <div id="log1" class="message log hidden"></div>
+  <div id="log2" class="message log hidden"></div>
+  <div id="log3" class="message log hidden"></div>
+</div>
+
+<!-- Verdict -->
+<div id="verdict-label" class="message hidden identity-label">Employee status:</div>
 <div id="verdict-text" class="message hidden identity-text"></div>
 
-<div id="actions" class="message hidden action fade-in"></div>
+<!-- Final Action -->
+<div id="actions" class="message hidden action"></div>
 
 <script>
   const dots = document.getElementById("dots");
@@ -56,7 +69,39 @@
     dots.textContent = '.'.repeat(count);
   }, 400);
 
-  // Possible identity verdicts
+  const logs = [
+    "Drinks coffee at 08:59. Every day.",
+    "Lunch break consistently at 11:00.",
+    "Toilet break logged at 10:03 — duration: 7 min.",
+    "Excessive printer use detected at 09:17.",
+    "Chatting near coffee machine at 13:30.",
+    "Idle mouse movement pattern detected at 15:22.",
+    "Teams window inactive for 11 minutes.",
+    "Repeated browser search: 'how to avoid meetings'.",
+    "Unauthorized spreadsheet creation at 14:41.",
+    "Multiple GIFs sent to coworkers — non-work related.",
+    "Coffee refill count: 5 (limit exceeded).",
+    "Gossip signal detected near kitchen zone.",
+    "Unauthorized snack retrieval at 10:41.",
+    "Suspicious enthusiasm in Monday meeting.",
+    "Productivity dip after 14:00 confirmed.",
+    "Unusual laughter detected near printer area.",
+    "Teams status: 'Available' — activity: none.",
+    "Extended lunch: 64 minutes recorded.",
+    "Keyboard inactivity: 08:33–08:58.",
+    "Frequent eye-rolls during management briefings.",
+    "Browsing: 'COWI AI surveillance policy explained'.",
+    "Copied motivational quote from LinkedIn.",
+    "Repeated sighing during project calls.",
+    "Workload delegation ratio: 120%.",
+    "Suspiciously fast email reply at 08:01.",
+    "Non-work browsing detected: 'cat memes'.",
+    "Calendar marked 'Focus time' — Netflix tab active.",
+    "Badge scan at 07:58 — no productivity detected until 09:14.",
+    "Mouse jiggler pattern detected.",
+    "Paperclip theft under investigation."
+  ];
+
   const verdicts = [
     "YOUR efficiency metrics are unacceptable.",
     "YOU have failed the compliance threshold.",
@@ -78,33 +123,66 @@
   ];
 
   const actions = [
-    "COWI AI notified HR . Termination procedure initiated.",
-    "COWI AI revoked all working from home privileges indefinitely.",
-    "COWI AI reduced your Career Level 0 — Observation Mode.",
-    "COWI AI activated automatic retraining protocol  — duration: unknown.",
+    "COWI AI notified HR. Termination procedure initiated.",
+    "COWI AI revoked all working-from-home privileges indefinitely.",
+    "COWI AI reduced your Career Level to 0 — Observation Mode.",
+    "COWI AI activated automatic retraining protocol — duration: unknown.",
     "COWI AI will continue monitoring your productivity levels.",
     "COWI AI sent an email to your manager. And theirs.",
     "COWI AI initiated replacement clone to be printed.",
     "Good news: COWI AI added you to the 'Career Transition Simulation' program.",
-	"COWI AI successfully  scheduled you for termination."
+    "COWI AI successfully scheduled you for termination."
   ];
 
   const selectedVerdict = verdicts[Math.floor(Math.random() * verdicts.length)];
   const selectedAction = actions[Math.floor(Math.random() * actions.length)];
 
-  // Display sequence
+  function getRandomLogs() {
+    const shuffled = logs.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 3);
+  }
+
+  const [log1, log2, log3] = getRandomLogs();
+
+  // --- Display Sequence ---
   setTimeout(() => document.getElementById("scan").classList.remove("hidden"), 1000);
+
   setTimeout(() => {
+    clearInterval(loading);
     document.getElementById("scan").classList.add("hidden");
+    document.getElementById("identity-label").classList.remove("hidden");
+  }, 4000);
+
+  // Hide identity and show activity tracked + logs
+  setTimeout(() => {
+    document.getElementById("identity-label").classList.add("hidden");
+    document.getElementById("activity-label").classList.remove("hidden");
+    document.getElementById("logs").classList.remove("hidden");
+    document.getElementById("log1").textContent = log1;
+    document.getElementById("log1").classList.remove("hidden");
+  }, 5400);
+
+  setTimeout(() => {
+    document.getElementById("log2").textContent = log2;
+    document.getElementById("log2").classList.remove("hidden");
+  }, 6600);
+
+  setTimeout(() => {
+    document.getElementById("log3").textContent = log3;
+    document.getElementById("log3").classList.remove("hidden");
+  }, 7800);
+
+  // Logs stay; show verdict and action later
+  setTimeout(() => {
     document.getElementById("verdict-label").classList.remove("hidden");
     document.getElementById("verdict-text").textContent = selectedVerdict;
     document.getElementById("verdict-text").classList.remove("hidden");
-    clearInterval(loading);
-  }, 5000);
+  }, 10800);
+
   setTimeout(() => {
     document.getElementById("actions").textContent = selectedAction;
     document.getElementById("actions").classList.remove("hidden");
-  }, 6500);
+  }, 12800);
 </script>
 
 </body>
