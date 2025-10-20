@@ -15,7 +15,9 @@
     align-items: center;
     height: 100vh;
     text-align: center;
-    overflow: hidden;
+    /* FIX 1: allow native scroll so "pull to refresh" works */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .hidden { display: none; }
@@ -35,13 +37,15 @@
   .action { color: #b0a49a; font-style: italic; }
   .log { color: #d0c7bd; font-size: 1.1rem; }
 
-  #dots { color: #d0c7bd; }
+  #dots { color: #d0c7bd; display: inline-block; width: 1.5em; text-align: left; } /* FIX 2 */
 </style>
 </head>
 <body>
 
 <!-- Scanning -->
-<div id="scan" class="message hidden scan">Scanning facial structure<div id="dots">...</div></div>
+<div id="scan" class="message hidden scan">
+  Scanning facial structure<span id="dots">...</span>
+</div>
 
 <!-- Identity confirmation -->
 <div id="identity-label" class="message hidden identity-label">Identity confirmed.</div>
@@ -150,7 +154,6 @@
     document.getElementById("identity-label").classList.remove("hidden");
   }, 4000);
 
-  // Hide identity and show activity tracked + logs
   setTimeout(() => {
     document.getElementById("identity-label").classList.add("hidden");
     document.getElementById("activity-label").classList.remove("hidden");
@@ -169,17 +172,16 @@
     document.getElementById("log3").classList.remove("hidden");
   }, 7800);
 
-  // Logs stay; show verdict and action later
   setTimeout(() => {
     document.getElementById("verdict-label").classList.remove("hidden");
     document.getElementById("verdict-text").textContent = selectedVerdict;
     document.getElementById("verdict-text").classList.remove("hidden");
   }, 10800);
 
- // setTimeout(() => {
-   // document.getElementById("actions").textContent = selectedAction;
-  //  document.getElementById("actions").classList.remove("hidden");
-//  }, 12800);
+  // setTimeout(() => {
+  //   document.getElementById("actions").textContent = selectedAction;
+  //   document.getElementById("actions").classList.remove("hidden");
+  // }, 12800);
 </script>
 
 </body>
