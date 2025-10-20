@@ -104,21 +104,18 @@
 
   const verdicts = [
     "YOUR efficiency metrics are unacceptable.",
-    "YOU have failed the compliance threshold.",
     "YOUR efficiency is below COWI target.",
     "YOU are expendable.",
     "YOU are replaceable in COWI.",
     "YOU are non-essential in COWI.",
     "YOUR performance is terrible.",
     "YOUR contribution in COWI is obsolete.",
-    "YOU are malfunctioning.",
     "YOUR usefulness for COWI is minimal.",
     "YOU are redundant.",
     "YOUR compliance is insufficient.",
     "YOU are underperforming.",
     "YOUR output is unacceptable.",
     "YOU are not critical to COWI operations.",
-    "YOUR status in COWI is expendable.",
     "YOUR presence in COWI is unnecessary."
   ];
 
@@ -179,10 +176,10 @@
     document.getElementById("verdict-text").classList.remove("hidden");
   }, 10800);
 
-  setTimeout(() => {
-    document.getElementById("actions").textContent = selectedAction;
-    document.getElementById("actions").classList.remove("hidden");
-  }, 12800);
+ // setTimeout(() => {
+   // document.getElementById("actions").textContent = selectedAction;
+  //  document.getElementById("actions").classList.remove("hidden");
+//  }, 12800);
 </script>
 
 </body>
