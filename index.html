@@ -130,11 +130,36 @@
       pupil.style.top = 15 + distance*Math.sin(angle) + 'px';
     });
   }
-  document.addEventListener('mousemove', e=>moveEyes(e.clientX,e.clientY));
-  document.addEventListener('touchmove', e=>{
-    const t = e.touches[0];
-    moveEyes(t.clientX,t.clientY);
+  let moveTimeout;
+
+// Add smooth transition for pupils
+pupils.forEach(p => {
+  p.style.transition = 'left 0.3s ease, top 0.3s ease';
+});
+
+// Mouse movement
+document.addEventListener('mousemove', e => {
+  moveEyes(e.clientX, e.clientY);
+  clearTimeout(moveTimeout);
+  moveTimeout = setTimeout(resetEyes, 800);
+});
+
+// Touch movement
+document.addEventListener('touchmove', e => {
+  const t = e.touches[0];
+  moveEyes(t.clientX, t.clientY);
+  clearTimeout(moveTimeout);
+  moveTimeout = setTimeout(resetEyes, 800);
+});
+
+// Function to bring pupils smoothly back to center
+function resetEyes() {
+  pupils.forEach(p => {
+    p.style.left = '15px';
+    p.style.top = '15px';
   });
+}
+
 
   // Logs
   const logs = [
