@@ -113,7 +113,7 @@
   // Eyes appear
   setTimeout(() => {
     document.getElementById('eyes').style.opacity = 1;
-  }, 8500);
+  }, 5500);
 
   // Eyes follow cursor/touch
   const eyes = document.querySelectorAll('.eye');
@@ -217,7 +217,7 @@
           currentLine+='\n';
           charIndex=0;
           lineIndex++;
-          setTimeout(type,700);
+          setTimeout(type,600);
         }
       } else if(callback){
         callback();
@@ -235,6 +235,7 @@
       `Local time: ${info.time}`,
 	  'User recent activity:',
       ...userLogs,
+	  " ",
       "Analysis complete.",
       "Added to registration for Human 2.0 list."
     ];
@@ -245,7 +246,7 @@
         document.getElementById('final-screen').style.opacity = 1;
       }, 1100);
     });
-  },11000);
+  },10000);
 
 </script>
 </body>
